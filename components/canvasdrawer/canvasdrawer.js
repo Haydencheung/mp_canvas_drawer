@@ -126,14 +126,34 @@ Component({
       })
     },
     drawImage (params) {
+      console.log(params)
       this.ctx.save()
       const { url, top = 0, left = 0, width = 0, height = 0, borderRadius = 0, deg = 0 } = params
-      // if (borderRadius) {
-      //   this.ctx.beginPath()
-      //   this.ctx.arc(left + borderRadius, top + borderRadius, borderRadius, 0, 2 * Math.PI)
-      //   this.ctx.clip()
-      //   this.ctx.drawImage(url, left, top, width, height)
-      // } else {
+      if (borderRadius) {
+        this.ctx.beginPath();
+
+        this.ctx.arc(left + borderRadius, top + borderRadius, borderRadius, Math.PI, Math.PI * 1.5);
+        this.ctx.moveTo(left + borderRadius, top);
+        this.ctx.lineTo(left + width - borderRadius, top);
+        this.ctx.lineTo(left + width, top + borderRadius);
+
+        this.ctx.arc(left + width - borderRadius, top + borderRadius, borderRadius, Math.PI * 1.5, Math.PI * 2);
+        this.ctx.lineTo(left + width, top + height - borderRadius);
+        this.ctx.lineTo(left + width - borderRadius, top + height);
+
+        this.ctx.arc(left + width - borderRadius, top + height - borderRadius, borderRadius, 0, Math.PI * 0.5);
+        this.ctx.lineTo(left + borderRadius, top + height);
+        this.ctx.lineTo(left, top + height - borderRadius);
+
+        this.ctx.arc(left + borderRadius, top + height - borderRadius, borderRadius, Math.PI * 0.5, Math.PI);
+        this.ctx.lineTo(left, top + borderRadius);
+        this.ctx.lineTo(left + borderRadius, top);
+        this.ctx.clip()
+
+        this.ctx.drawImage(url, left, top, width, height)
+        this.ctx.closePath();
+
+      } else {
       if (deg !== 0) {
         this.ctx.translate(left + width/2, top + height/2)
         this.ctx.rotate(deg * Math.PI / 180)
@@ -141,7 +161,7 @@ Component({
       } else {
         this.ctx.drawImage(url, left, top, width, height)
       }
-      // }
+      }
       this.ctx.restore()
     },
     drawText (params) {
